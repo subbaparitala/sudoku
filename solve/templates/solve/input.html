@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load extras %}
+{% load static %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{% static 'solve/main.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container" id="sudoku">
+	<h2 style="text-align: center;" class="padding">SUDOKU!!!</h2>
+	<form name="sudokuInput" method="post" action="{% url 'solve:solution' %}" id="gridForm">
+	{% csrf_token %}
+		<table class="table table-bordered" id="sudokuInputGrid">
+		<tbody>
+			{% for row in "9"|range_list %}
+				<tr class="row">
+				{% with forloop.counter0 as out_counter %}
+				{% for element in "9"|range_list %}
+					{% with out_counter|multiply:9 as in_counter %}
+					{% with in_counter|addition:forloop.counter0 as unique_id %}
+					<td id="cell-element{{ unique_id }}" class="valid-value">
+							
+							<input solution="{{ solution|index:row|index:element }}" name="{{ unique_id }}" id="{{ unique_id }}" value="{% if sorter|is_in:unique_id %}{{ solution|index:row|index:element }}{% endif %}" type="number" min="1" max="9" style="border:none;" class="input-sm"/>
+							
+					</td>
+					{% endwith %}
+					{% endwith %}
+				{% endfor %}
+				{% endwith %}
+				</tr>
+			{% endfor %}
+		</tbody>
+		</table>
+	<input value="Finish" type="submit" name="submit" id="submit" class="btn btn-primary"/>
+</form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		var cells = new Array();
+		for (var i = 0; i < 81; i++) {
+			cells.push(i);
+		}
+		var valid_cells = new Array();
+		for (var i = 0; i < 81; i++) {
+			valid_cells.push(true);
+		}
+		$('#gridForm').submit(function() {
+			var is_grid_valid = true;
+			$(valid_cells).each(function(index) {
+				is_grid_valid = is_grid_valid & valid_cells[index];
+			});
+			if (is_grid_valid == 0) {
+				alert('Enter Valid Data Into The Grid Before Submit');
+				return false;
+			}
+			else {
+				return true;
+			}
+		});
+		verification(cells, valid_cells);
+
+    });
+
+	$('.input-sm').change(function(){
+		if($(this).val() != $(this).attr('solution')){
+			$(this).css('background-color','yellow');
+		} else{
+			$(this).css('background-color','white');
+		}
+	});
+
+	function verification (cells, valid_cells) {
+		$(cells).each(function(index) {
+			var input_box_id = '#' + index.toString();
+			var cell_id = '#cell-element' + index.toString();
+			$(input_box_id).change(function() {
+				valid_cells[index] = displayAlert($(this).val(), cell_id);
+			});
+		});
+	}
+	function displayAlert(input_value, cell_id, is_cell_valid) {
+		if (input_value == "") {
+			$(cell_id).removeClass('invalid-value').addClass('valid-value');
+			console.log('Empty Cell');
+			return true;
+		}
+		console.log('Not an Empty cell');
+		if (!$.isNumeric(input_value)) {
+			$(cell_id).removeClass('valid-value').addClass('invalid-value');
+			console.log('not a numeric value');
+			alert('Enter Numeric Value');
+			return false;
+		}
+		else {
+			console.log('numeric value');
+			if (input_value < 1 || input_value > 9) {
+				$(cell_id).removeClass('valid-value').addClass('invalid-value');
+				console.log('invalid range');
+				alert('Enter A Number Between 1 and 9 inclusive');
+				return false;
+			}
+			else {
+				console.log('valid input');
+				$(cell_id).removeClass('invalid-value').addClass('valid-value');
+				return true;
+			}
+		}
+	}
+</script>
+{% endblock %}

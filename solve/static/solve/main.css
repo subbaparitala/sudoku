@@ -1,0 +1,63 @@
+.parentCube {
+	height:40px;
+}
+.childCube {
+	width:99px;
+}
+input[type="number"] {
+	padding:0px;
+	margin-bottom:0px;
+	border:none;
+	width: 100%;
+	text-align: center;
+	!important;
+}​
+textarea:focus, input:focus{
+	outline: 0;
+}
+*:focus {
+	outline: 0;
+}
+.box input {
+    padding: 10px;
+    width: 70px;
+    text-align: center;
+}
+
+input[disabled='disabled'] {
+    background: #efefef;
+}
+
+.padding {
+	padding-top: 45px;
+	margin-top: -40px;
+}
+
+.visible-phone.padding {
+}
+
+.visible-tablet.padding {
+}
+
+.visible-desktop.padding {
+	padding-top: 45px;
+	margin-top: -40px;
+}
+
+.invalid-value {
+	background-color: #c0392b;
+	color: #2c3e50;
+	!important;
+}
+
+.valid-value {
+	background-color: #ffffff;
+}
+
+.new-valid-grid {
+	vertical-align:middle;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	padding: 10px;
+}

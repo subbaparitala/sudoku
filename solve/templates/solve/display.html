@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block content %}
+
+<div class="container" id="sudoku">
+	<h2 class="padding">Solution</h2>
+	<table class="table table-bordered">
+	<tbody>
+		{% for row in grid %}
+			<tr>
+			{% for element in row %}
+				<td>{{ element }}</td>
+			{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+	</table>
+	<form action="{% url 'home' %}">
+		<input type="submit" class="btn btn-primary" value="Solve Another One"/>
+	</form>
+
+</div>
+{% for posted_value in nothing %}
+	{{ posted_value }}
+{% endfor %}
+
+{% endblock %}
